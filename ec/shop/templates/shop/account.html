@@ -1,0 +1,145 @@
+{% extends 'shop/basic.html'%}
+{% block title %} My Account{%endblock%}
+{% block nav %}
+    #Account
+{% endblock %}
+{% block css%} 
+    <style>
+        .container{
+        background: url('/static/shop/pexels-johannes-plenio-1103970.jpg') no-repeat center center/cover;
+            margin-top: 61px;
+    height: 72.5vh;
+  
+    padding: 70px 130px;
+        }
+        .buttons a{
+            text-decoration: none;
+    color: black;
+    background: #8b96ef;
+    display: inline-block;
+    width: 189px;
+    padding: 8px 12px;
+    border: 2px solid #7575e6;
+    border-radius: 4px;
+    margin: 10px 0px;
+    text-align: center;
+        }
+        .buttons{
+            margin: 10px 0px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 36%;
+        }
+        #account h3{
+            padding: 7px 0px;
+    font-size: 20px;
+        }
+        .btn{
+            font-size: 16px;
+    padding: 8px 26px;
+    margin: 8px;
+    border-radius: 5px;
+    outline: none;
+    border: 2px solid #8888eb;
+    cursor: pointer;
+    background-color: #9494ff;
+        }
+        @media screen and (max-width:431px) {
+            .container{
+                padding: 25px;
+                height: 81vh;
+            }
+            .buttons{
+                width: 83%;
+            }
+            .buttons a{
+                margin: 10px;
+            }
+        }
+    </style>
+{%endblock%}
+{% block body%}
+    <div id="log" class="container">
+        <h1>Login or Create a New Account</h1>
+        <div class="buttons">
+            <a href="/shop/account/login">Login to an Existing Account </a>
+            <a href="/shop/account/signup">Create a New Account</a>
+        </div>
+    </div>
+    <div id="account" class="container">
+
+       
+    </div>
+{% endblock%}
+{% block js%}
+    <script>
+    if(localStorage.getItem('cart')==null){
+        var cart={}
+    }
+    else{
+        cart=JSON.parse(localStorage.getItem('cart'))
+        updateSum(cart)
+    }
+        if(localStorage.getItem('logged')==null){
+            logged=false
+            console.log(logged)
+        }
+        else{
+            logged=JSON.parse(localStorage.getItem('logged'))
+            console.log(logged)
+        }
+        if(localStorage.getItem('l')==null){
+            l=["{{l.name}}","{{l.phone}}","{{l.email}}","{{l.address}}","{{l.state}}","{{l.city}}","{{l.zipCode}}"]
+            console.log(l)
+        }
+        else{
+            l=JSON.parse(localStorage.getItem('l'))
+            console.log(l)
+        }
+        {% if loginSuccess %}
+            alert('login Success')
+            localStorage.setItem('l', JSON.stringify(l))
+            localStorage.setItem('logged', true)
+            location.href="http://127.0.0.1:8000/shop/account/"
+            // console.log()
+        {% endif %}
+        {% if emailNotFound %}
+            location.href="http://127.0.0.1:8000/shop/account/login/"
+            alert('login failed! Incorrect Email or You may have not created an account with this email. Enter Correct Email or Click on the signup button to create an account')
+        {% endif %}
+        {% if WrongPassword %}
+            location.href="http://127.0.0.1:8000/shop/account/login/"
+            alert('Wrong Password! Try Again')
+        {% endif %}
+        if(logged==true){
+            document.getElementById('log').style.display='none'
+            document.getElementById('account').style.display='block'
+            str=`        <h1>${l[0]}</h1>
+        <h3>Phone: ${l[1]}</h3>
+        <h3>Email: ${l[2]}</h3>
+        <h3>Address: ${l[3]}</h3>
+        <h3>State: ${l[4]}</h3>
+        <h3>City: ${l[5]}</h3>
+        <h3>ZipCode: ${l[6]}</h3>
+        <button id="logOut" class="btn">Log Out</button>`
+            document.getElementById('account').innerHTML=str
+        }
+        else{
+            document.getElementById('account').style.display='none'
+            document.getElementById('log').style.display='block'
+        }
+        document.getElementById('logOut').addEventListener('click',()=>{
+            localStorage.removeItem('logged')
+            localStorage.removeItem('l')
+            location.reload()
+        })
+        function updateSum(cart){
+        var sum=0
+        for(item in cart){
+            sum=sum+cart[''+item][0]
+        }
+        document.getElementById('cartNo').innerHTML=sum
+    }
+    </script>
+{%endblock%}

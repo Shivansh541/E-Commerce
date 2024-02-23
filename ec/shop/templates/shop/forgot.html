@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Account - Forgot</title>
+    <style>
+                *{
+            margin: 0;
+            padding: 0;
+        }
+                .container{
+            background: url("/static/shop/vecteezy_fingerprint-identity-sensor-data-protection-system-podium_7164537.jpg") no-repeat center center/cover;
+        
+            display: flex;
+            width: 100%;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: white;
+            flex-direction: column;
+        }
+        .container form{
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .container input::placeholder{
+            color: white;
+        }
+        #code{
+            font-size: 14px;
+            color: white;
+            border: none;
+            border-bottom: 3px solid white;
+            border-radius: 4px;
+    padding: 7px;
+    width: 410px;
+    margin: 5px 0px;
+    background: none;
+    outline: none;
+        }
+        .container input{
+            font-size: 14px;
+            color: white;
+            border: none;
+            border-bottom: 3px solid white;
+            border-radius: 4px;
+    padding: 7px;
+    width: 400px;
+    margin: 5px;
+    background: none;
+    outline: none;
+        }
+        .container a{
+            padding: 5px;
+    text-decoration: none;
+    color: #ee0aff;
+        }
+        .btn{
+            font-size: 14px;
+    padding: 6px;
+    width: 100px;
+    background: deepskyblue;
+    border: none;
+    border-radius: 4px;
+    margin: 10px auto;
+    cursor: pointer;
+        }
+        .container p{
+            width: 21%;
+            margin: 10px;
+        }
+        .form-group label{
+            width: 44px;
+    margin: 10px;
+    font-size: 18px;
+    display: inline-block;
+        }
+        .container select{
+            font-size: 15px;
+    padding: 4px;
+    width: 83%;
+    color: white;
+    background: none;
+    border: none;
+    outline: none;
+    border-bottom: 3px solid white;
+        }
+        select option{
+            color: black;
+        }
+        #newPassword{
+            display: none;
+        }
+        #forgotEmail{
+            width: 295px;
+            font-size: 14px;
+            color: white;
+            border-radius: 4px;
+    padding: 7px;
+    margin: 5px;
+    background: none;
+    border: none;
+    outline: none;
+        }
+        .box{
+            border-bottom: 3px solid white;
+    border-radius: 4px;
+    height: 43px;
+        }
+    </style>
+</head>
+<body>
+    <div id="Forgot" class="container">
+        <h1 class="forgot">Forgotten Password</h1>
+        <form action="/shop/account/forgot" method="get">
+            <div class="box">
+                <input type="email" id="forgotEmail" name="email" placeholder="Enter Your Email" required>
+                <button type="button" id="sendOtp" class="btn">Send Otp</button>
+            </div>
+            <input type="text" id="code" name="code" placeholder="Enter Security Code" required>
+            <button id="btn" class="btn" type="submit">Submit</button>
+        </form>
+    </div>
+    <div id="newPassword" class="container">
+        <h1 class="setpass">Set New Password</h1>
+        <form action="/shop/account/" method="post">
+            {% csrf_token %}
+            <input type="password" name="password" id="GenerateNewPassword" placeholder="Enter Your Password" autocomplete="on" required>
+            <input type="password" name="password" id="ConfirmNewPassword" placeholder="Confirm Password" autocomplete="on" required>
+            <button type="submit" class="btn">Submit</button>
+        </form>
+    </div>  
+    <script>
+        document.getElementById('btn').addEventListener('click', ()=>{
+            document.getElementById('Forgot').style.display='none'
+            document.getElementById('newPassword').style.display='flex'
+        })
+    </script> 
+</body>
+</html>

@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Account - login</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        .container{
+            background: url("/static/shop/vecteezy_fingerprint-identity-sensor-data-protection-system-podium_7164537.jpg") no-repeat center center/cover;
+        
+            display: flex;
+            width: 100%;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: white;
+            flex-direction: column;
+        }
+        .container form{
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .container input::placeholder{
+            color: white;
+        }
+        .container input{
+            font-size: 14px;
+            color: white;
+            border: none;
+            border-bottom: 3px solid white;
+            border-radius: 4px;
+    padding: 7px;
+    width: 400px;
+    margin: 5px;
+    background: none;
+    outline: none;
+        }
+        .container a{
+            padding: 5px;
+    text-decoration: none;
+    color: #ee0aff;
+        }
+        .btn{
+            font-size: 14px;
+    padding: 6px;
+    width: 100px;
+    background: deepskyblue;
+    border: none;
+    border-radius: 4px;
+    margin: 10px auto;
+    cursor: pointer;
+        }
+        .container p{
+            width: 21%;
+            margin: 10px;
+        }
+        .form-group label{
+            width: 44px;
+    margin: 10px;
+    font-size: 18px;
+    display: inline-block;
+        }
+        .container select{
+            font-size: 15px;
+    padding: 4px;
+    width: 83%;
+    color: white;
+    background: none;
+    border: none;
+    outline: none;
+    border-bottom: 3px solid white;
+        }
+        select option{
+            color: black;
+        }
+        @media screen and (max-width:431px) {
+            .container p{
+                width: 95%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="Login" class="container">
+        <h1 id="loghead">Login</h1>
+        <form action="/shop/account/" method="post"> {% csrf_token %}
+            <input type="email" id="email" name="email" placeholder="Enter Your Email">
+            <input type="password" id="password" name="password" autocomplete="on" placeholder="Enter Password">
+            <a id="forgotBtn" href="/shop/account/forgot">Forgot Password?</a>
+            <button type="submit" class="btn">Login</button>
+        </form>
+        <p>Don't Have an Account? <a id="signBtn" href="/shop/account/signup">Sign Up</a></p>
+    </div>
+    <script>
+        if(localStorage.getItem('logged')==null){
+            var logged=false
+        }
+        else{
+            logged=JSON.parse(localStorage.getItem('logged'))
+            console.log(logged)
+        }
+        if(localStorage.getItem('cart')==null){
+            var cart={}
+        }
+        else{
+            cart=JSON.parse(localStorage.getItem('cart'))
+            updateSum(cart)
+        }
+        function updateSum(cart){
+            var sum=0
+            for(item in cart){
+                sum=sum+cart[''+item][0]
+            }
+            document.getElementById('cartNo').innerHTML=sum
+        }
+
+    </script>
+</body>
+</html>

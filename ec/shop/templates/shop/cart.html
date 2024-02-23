@@ -1,0 +1,252 @@
+
+{% extends 'shop/basic.html'%}
+{% block title %}Cart {%endblock%}
+{% block nav %}
+    #Cart
+{% endblock %}
+{% block css %}
+    <style>
+        #cartNo{
+            bottom: 11px;
+        }
+        .container{
+            margin-top: 60px;
+        }
+        .cart-items{
+            display: flex;
+        }
+        .cart-items img{
+            margin: 20px;
+            height: 300px;
+        }
+        .row{
+            width: 40%;
+        }
+        .row h1{
+            padding: 15px 10px;
+        }
+        .row h3{
+            padding: 0px 10px;
+        }
+        .row p{
+            padding: 10px 10px;
+        }
+        .img{
+            width: 300px;
+        }
+        .btn{
+    text-decoration: none;
+    color: white;
+    background-color: black;
+    padding: 8px;
+    margin: 8px;
+    cursor: pointer;
+}
+#text{
+    text-decoration: none;
+    color: black;
+}
+#img{
+    width: 25%;
+    text-align: center;
+}
+#org{
+    text-decoration: line-through;
+    font-size: 20px;
+}
+.row h3{
+    font-size: 25px;
+}
+.orderbox{
+    position: fixed;
+    z-index: 2;
+    box-shadow: 17px 8px 20px 0px black;
+    height: 8%;
+    width: 100%;
+    bottom: 0;
+    display: flex;
+    justify-content: end;
+    align-items: center;
+    background-color: white;
+}
+.plcodr{
+    margin-right: 170px;
+    background-color: rgb(253, 165, 2);
+    color: black;
+    scale: 1.4;
+}
+.box{
+    display: flex;
+}
+.bill{
+    position: fixed;
+    top: 100px;
+    right: 0;
+    width: 33%;
+    box-shadow: 1px 0px 2px black;
+}
+#delChar span{
+    text-decoration: line-through;
+}
+.para,.det{
+    padding: 15px;
+}
+.bill h1{
+    border-bottom: 1px solid black;
+}
+#amount{
+    padding: 30px 15px;
+    border-top: 1px solid black;
+    border-bottom: 1px solid black;
+}
+#sale{
+    color: green;
+    font-size: 27px;
+}
+@media screen and (max-width:431px) {
+    .orderbox{
+        bottom: 70px;
+    }
+    .bill{
+        top: unset;
+        bottom: 143px;
+        width: 100%;
+    }
+    .row{
+        width: 65%;
+    }
+    a#img{
+        width: 45%;
+    }
+}
+    </style>
+{% endblock %}
+{% block body %}
+<div class="box">
+    <div class="container">
+    </div>
+    <div class="bill">
+        <h1 class="det">Price Details</h1>
+        <p class="para" id="totalPrice">Price <span id="qty">(qty item): </span>12000</p>
+        <p class="para" id="discount">Discount: 3000</p>
+        <p class="para" id="delChar">Delivery Charges: <span>₹40</span>/Free</p>
+        <h3 id="amount">Total Amount: 9000</h3>
+    </div>
+    <div class="orderbox">
+        <a id="placeOrderBtn" href="/shop/cart/placeOrder"><button class="plcodr btn">Place Order</button></a>
+    </div>
+</div>
+
+{%endblock%}
+
+{%block js%}
+    <script>
+    if(localStorage.getItem('cart')==null){
+        var cart={}
+    }
+    else{
+        cart=JSON.parse(localStorage.getItem('cart'))
+        
+    }
+    console.log(cart)
+    updateSum(cart)
+    function updateSum(cart){
+        var sum=0
+        for(item in cart){
+            sum=sum+cart[''+item][0]
+        }
+        document.getElementById('cartNo').innerHTML=sum
+    }
+    for(item in cart){
+        let name=cart[item][1]
+        let qty=cart[item][0]
+        let price = cart[item][2]
+        let desc=cart[item][3]
+        let image=cart[item][4]
+        var numericPrice = price.replace('₹', '');
+// Parsing the numeric part as a float
+        disPrice = parseInt((numericPrice - (0.3 * numericPrice)) - 1);
+
+        mystr=`    <div class="cart-items">
+        <a id="img" href="/shop/products/${item}">
+            <img id="image${item}" src=${image} alt="">
+        </a>
+        <a id="text" href="/shop/products/${item}">
+            <div class="row">
+                <h1 id="prodName">${name}</h1>
+                <h3><span id="org">${price}</span>/₹${disPrice}&nbsp;&nbsp; <span id="sale"> 30% off</span></h3>
+                <p id="desc${item}">${desc}</p>
+            </a>
+                <span class="after" id="after${item}">
+                    <button id="minus${item}" class="btn minus">-</button>
+                    <span id='val${item}'>${qty}</span>
+                    <button id="plus${item}" class="btn plus">+</button>
+            </span>
+        </div>
+    </div>`
+    $('.container').append(mystr)
+}
+    </script>
+<script>
+    if(localStorage.getItem('cartStr')==null){
+        var cartStr=[]
+    }
+    else{
+        cartStr=JSON.parse(localStorage.getItem('cartStr'))
+    }
+    $('.after').on('click', 'button.minus', function(){
+        a=this.id.slice(5, )
+        cart[''+a][0]=cart[''+a][0]-1
+        cart[''+a][0]=Math.max(0,cart[''+a][0])
+        document.getElementById('val'+a).innerHTML=cart[''+a][0]
+        if(cart[''+a][0]==0){
+            delete(cart[''+a])
+            location.reload()
+        }
+        updateSum(cart)
+        console.log(cart)
+        localStorage.setItem('cart', JSON.stringify(cart))
+        // document.getElementById('cartNo').innerHTML=Object.keys(cart).length
+        
+    })
+    $('.after').on('click', 'button.plus', function(){
+        a=this.id.slice(4, )
+        cart[''+a][0]=cart[''+a][0]+1
+        document.getElementById('val'+a).innerHTML=cart[''+a][0]
+        console.log(cart)
+        localStorage.setItem('cart', JSON.stringify(cart))
+        // document.getElementById('cartNo').innerHTML=Object.keys(cart).length
+        updateSum(cart)
+    })
+    function updateSum(cart){
+        var sum=0
+        var totalPrice=0
+        var totaldisPrice=0
+        for(item in cart){
+            price=cart[''+item][2]
+            sum=sum+cart[''+item][0]
+            var numericPrice = price.replace('₹', '');
+            var disPrice = parseInt((numericPrice - (0.3 * numericPrice)) - 1);
+            var dispqty=disPrice*cart[''+item][0]
+            var pqty=numericPrice*cart[''+item][0]
+            totalPrice+=(pqty)
+            totaldisPrice+=dispqty
+        }
+        console.log(totalPrice)
+        console.log(totaldisPrice)
+        var discounted=totalPrice-totaldisPrice
+        document.getElementById('totalPrice').innerHTML=`Price <span>(${sum} item): </span>₹${totalPrice}`
+        document.getElementById('discount').innerText = `Discount: ₹${discounted}`
+        document.getElementById('amount').innerHTML = `Total Amount: ₹${totaldisPrice}`
+        document.getElementById('cartNo').innerHTML=sum
+        if(sum==0){
+            document.querySelector('.container').innerHTML="<h1>No Items added in your Cart</h1>"
+            document.getElementById('placeOrderBtn').addEventListener('click',()=>{
+                document.getElementById('placeOrderBtn').href="/shop/cart/"
+                alert("You Can't Place Order as Your Cart Is Empty")
+            })
+        }
+    }
+    updateSum(cart)
+</script>
+    {%endblock%}

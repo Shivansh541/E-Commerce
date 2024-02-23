@@ -1,0 +1,195 @@
+{% extends 'shop/basic.html'%}
+{% block title %} {{product.product_name}} - My Cart {% endblock %}
+{% block nav %}
+    #home
+{% endblock %}
+{% block css %} 
+<style>
+
+    .btn{
+        text-decoration: none;
+        color: white;
+        background-color: blue;
+        padding: 10px 15px;
+        font-size: 14px;
+        border: none;
+        outline: none;
+        margin: 8px;
+        cursor: pointer;
+    }
+    .btn:hover{
+        background-color: black;
+        color: white;
+    }
+    .row img{
+    height: 400px;
+    margin: 10px 90px;
+}
+.container{
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    padding: 100px 0px;
+}
+.org{
+    font-size: 25px;
+    text-decoration: line-through;
+}
+.name{
+    font-size: 35px;
+    padding: 10px 0px;
+}
+.buttons{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 17px;
+}
+.desc{
+    padding: 10px 0px;
+    width: 800px;
+}
+#about{
+    width: 800px;
+}
+.after{
+    display: none;
+}
+#sale{
+    color: green;
+    font-size: 26px;
+}
+@media screen and (max-width:431px) {
+    .container{
+        flex-direction: column;
+    }
+    .row{
+        text-align: center;
+    }
+    .despt{
+        padding: 20px;
+    }
+    .despt p,#about{
+        width: 100%;
+    }
+}
+</style>
+{% endblock%}
+{% block body %} 
+<div class="container">
+    <div class="box">
+        <div class="row">
+            <img id="image{{product.id}}" src="/media/{{product.image}}" alt="">
+        </div>
+        <div class="buttons" id="div{{product.id}}">
+            <button id="{{product.id}}" class="btn cart">Add to Cart</button>
+            <span class="after" id="after{{product.id}}">
+                <button id="minus{{product.id}}" class="btn minus">-</button>
+                <span id="val{{product.id}}">1</span>
+                <button id="plus{{product.id}}" class="btn plus">+</button>
+            </span>
+        </div>
+    </div>
+    <div class="despt">
+        <h1 class="name" id="prodName{{product.id}}">{{product.product_name}}</h1>
+        <h2 class="price"><span  id="price{{product.id}}" class="org">₹{{product.price}}</span>/₹{{product.disprice}}&nbsp;&nbsp; <span id="sale"> 30% off</span></h2>
+        <p class="desc" id="desc{{product.id}}">{{product.desc}}</p>
+        <h1>About Item</h1>
+        <p id="about">{{product.about}}</p>
+    </div>
+</div>
+
+
+
+{% endblock%}
+{% block js%} 
+<script>
+
+if(localStorage.getItem('cart')==null){
+        var cart={}
+    }
+    else{
+        cart=JSON.parse(localStorage.getItem('cart'))
+        updateSum(cart)
+    }
+    // if(cart[idstr]==undefined){
+
+    // }
+    $('.cart').click(function(){
+        var idstr=this.id.toString()
+        if(cart[idstr] != undefined){
+            qty=cart[idstr][0]+1
+            prodname=document.getElementById('prodName'+idstr).innerHTML
+
+            price = document.getElementById('price'+idstr).innerHTML
+            desc = document.getElementById('desc'+idstr).innerHTML
+            image=document.getElementById('image'+idstr).src
+            cart[idstr]=[qty,prodname,price,desc,image]
+        }
+        else{
+            qty=1
+            prodname=document.getElementById('prodName'+idstr).innerHTML
+            price = document.getElementById('price'+idstr).innerHTML
+            desc = document.getElementById('desc'+idstr).innerHTML
+            image=document.getElementById('image'+idstr).src
+            cart[idstr]=[qty,prodname,price,desc,image]
+        }
+        console.log(cart)
+        updateCart(idstr)
+        localStorage.setItem('cart', JSON.stringify(cart))
+        updateSum(cart)
+        
+    })
+    var btnid=document.querySelector('.cart').id
+    console.log(btnid)
+    updateCart(btnid)
+    function updateCart(btnid){
+        if(cart[btnid]==undefined){
+            document.getElementById('after'+btnid).style.display='none'
+            document.getElementById(''+btnid).style.display='block'
+        }
+        else{
+            document.getElementById(''+btnid).style.display='none'
+            document.getElementById('val'+btnid).innerHTML=cart[''+btnid][0]
+            document.getElementById('after'+btnid).style.display='block'  
+        }
+    }
+    $('.after').on('click', 'button.minus', function(){
+        a=this.id.slice(5, )
+        cart[''+a][0]=cart[''+a][0]-1
+        cart[''+a][0]=Math.max(0,cart[''+a][0])
+        document.getElementById('val'+a).innerHTML=cart[''+a][0]
+        if(cart[''+a][0]==0){
+            delete(cart[''+a])
+            document.getElementById('after'+a).style.display='none'
+            document.getElementById(''+a).style.display='block'
+        }
+        updateCart(''+a)
+        updateSum(cart)
+
+        console.log(cart)
+        localStorage.setItem('cart', JSON.stringify(cart))
+        // document.getElementById('cartNo').innerHTML=Object.keys(cart).length
+
+    })
+    $('.after').on('click', 'button.plus', function(){
+        a=this.id.slice(4, )
+        cart[''+a][0]=cart[''+a][0]+1
+        document.getElementById('val'+a).innerHTML=cart[''+a][0]
+        updateCart(''+a)
+        updateSum(cart)
+        console.log(cart)
+        localStorage.setItem('cart', JSON.stringify(cart))
+        // document.getElementById('cartNo').innerHTML=Object.keys(cart).length
+    })
+    function updateSum(cart){
+        var sum=0
+        for(item in cart){
+            sum=sum+cart[''+item][0]
+        }
+        document.getElementById('cartNo').innerHTML=sum
+    }
+
+    updateSum(cart)
+</script>
+{% endblock %}

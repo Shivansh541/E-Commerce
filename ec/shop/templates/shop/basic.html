@@ -1,0 +1,118 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %} {% endblock %}</title>
+    <link rel="stylesheet" href="/static/shop/style.css?{% now 'U' %}"/>
+    <link rel="stylesheet" media="screen and (max-width: 431px)" href="/static/shop/responsive.css">
+    <style>
+        {% block nav%} {%endblock%}
+        {
+            display: block;
+            color: aqua;
+            opacity: 1;
+            position: static;
+            border-bottom: 2px solid white;
+        }
+    /* Popover container */
+    .popover {
+        display: none;
+        position: absolute;
+        background-color: #fff;
+        border: 1px solid #fff;
+        color: black;
+        top: 65px;
+        width: 100px;
+        height: 50px;
+        padding: 5px;
+        border-radius: 5px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        z-index: 9999;
+    }
+
+    /* Popover arrow */
+    .popover::after {
+        content: '';
+        position: absolute;
+        border-style: solid;
+        border-width: 10px;
+        border-color: transparent transparent #fff;
+        top: -20px;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+
+    /* Show popover when hovered over the cart */
+    .navlist:hover .popover {
+        display: block;
+    }
+    </style>
+    {% block css %} {% endblock %}
+</head>
+<body>
+    <nav>
+        <ul id="leftnav">
+            <img src="/static/shop/pngwing.com.png" alt="logo">
+            <li class="navlist">
+                <a href="/shop">
+                    <i class="fa-solid fa-house-chimney"></i>
+                    <span id="home" class="navbtn">Home</span>
+                </a>
+            </li>
+            <li class="navlist">
+                <a href="/shop/notifications">
+                    <i class="fa-solid fa-bell"></i>
+                    <span id="Notifications" class="navbtn">Notifications</span>
+                </a>
+            </li>
+            <li class="navlist">
+                <a href="/shop/account">
+                    <i class="fa-solid fa-user"></i>
+                    <span id="Account" class="navbtn">My Account</span>
+                </a>
+            </li>
+            <li class="navlist">
+                <a href="/shop/contact">
+                    <i class="fa-solid fa-address-book"></i>
+                    <span id="contact" class="navbtn">Contact Us</span>
+                </a>
+            </li>
+            <li class="navlist">
+                <a href="/shop/cart">
+                    <span id="cartNo">0</span>
+                    <i class="fa-solid fa-cart-shopping"></i>
+                    <span id="Cart" class="navbtn">Cart</span>
+                    <!-- Popover content -->
+                </a>
+                <div class="popover">
+                    <button href="" id="clearCart" class="clearcart">Clear Cart</button>
+                </div>
+            </li>
+            
+        </ul>
+        <form action="/shop/search" method="get" id="rightnav">
+            <input type="search" name="search" id="search" placeholder="Search">
+            <button type="submit" class="btn"><i class="fa-solid fa-magnifying-glass"></i></button>
+        </form>
+    </nav>
+    {% block body%} {% endblock%}
+    
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://kit.fontawesome.com/cb5225a003.js" crossorigin="anonymous"></script>
+    <script src="/static/shop/script.js?{% now 'U' %}"></script>
+    {% block js%}
+        
+    {% endblock %}
+    <script>
+    $('.clearcart').click(function(){
+        cart=JSON.parse(localStorage.getItem('cart'));
+        localStorage.removeItem('cart')
+        cart={}
+        location.reload()
+    })
+
+    </script>
+</body>
+</html>

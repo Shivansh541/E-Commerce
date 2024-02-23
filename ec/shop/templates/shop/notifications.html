@@ -1,0 +1,46 @@
+
+{% extends 'shop/basic.html'%}
+{% block title %} Notifications - My Cart {%endblock%}
+{% block nav %}
+    #Notifications
+{% endblock %}
+{%block css %}
+    <style>
+        .container{
+            margin-top: 63px;
+        }
+        .notibox i{
+            color: green;
+    font-size: 40px;
+        }
+        .notibox{
+            align-items: center;
+            display: flex;
+            background-color: #e9d2d2;
+            padding: 10px 60px;
+            margin: 6px 0px;
+        }
+        .notibox p{
+            font-size: 22px;
+            margin: 10px 30px;
+        }
+    </style>
+{%endblock%}
+{%block body%}
+    <div class="container">
+        <div class="notibox">
+            <i class="fa-sharp fa-solid fa-circle-check"></i>      
+            <p>Your Order has been Confirmed</p>
+        </div>
+        <div class="notibox">
+            <i class="fa-sharp fa-solid fa-circle-check"></i>      
+            <p>Your Order has been Confirmed</p>
+        </div>
+        <div class="notibox">
+            <i class="fa-sharp fa-solid fa-circle-check"></i>      
+            <p>Your Order has been Confirmed</p>
+        </div>
+    </div>
+    <script src="https://kit.fontawesome.com/cb5225a003.js" crossorigin="anonymous"></script>
+
+{% endblock %}

@@ -1,0 +1,38 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+#search{
+    width: 67%;
+    border-radius: 6px;
+    height: 42px;
+    font-size: 20px;
+}
+#rightnav{
+    padding: 0;
+    width: 100vw;
+    height: 50px;
+
+}
+#leftnav{
+    width: 100vw;
+    position: fixed;
+    bottom: 0px;
+    height: 7vh;
+    background-color: black;
+}
+nav{
+    height: 54px;
+}
+nav .btn{
+    height: 45px;
+    width: 45px;
+}
+nav img{
+    position: fixed;
+    top: 0;
+    left: 0;
+}
+#Account{
+    width: 90px;
+}
